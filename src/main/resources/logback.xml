@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- hot scan to edit at runtime -->
+<configuration scan="true" scanPeriod="1 minutes">
+   <property name="logDir" value="${catalina.base}/logs/templates/"/>
+   <!-- <property name="logDir" value="/log" /> -->
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<!-- encoder的默认实现类是ch.qos.logback.classic.encoder.PatternLayoutEncoder -->
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [ %contextName ] - [%thread]
+				%-5level %logger{5}:%L - %msg%n</pattern>
+		</encoder>
+	</appender>
+	
+   <appender name="rollingFile"  class="ch.qos.logback.core.rolling.RollingFileAppender">
+      <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+         <!-- log file name -->
+         <!-- generate log every day -->
+         <!--<FileNamePattern>log/clever-log-%d{yyyy-MM-dd}.log</FileNamePattern>-->
+         <!-- generate log every hour -->
+         <FileNamePattern>${logDir}/templates-log-%d{yyyy-MM-dd_HH}.log</FileNamePattern>
+         <!-- the day that is kept-->
+         <MaxHistory>30</MaxHistory>
+      </rollingPolicy>
+      <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+         <!-- %d:date; %thread:thread name; %-5level:level appear from left with 5 char width; %msg:message; %n:\n-->
+         <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+      </encoder>
+      <!-- max file size -->
+      <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+         <MaxFileSize>20MB</MaxFileSize>
+      </triggeringPolicy>
+   </appender>
+
+  <root level="DEBUG">
+        <appender-ref ref="rollingFile" />
+        <appender-ref ref="STDOUT" />
+    </root>
+    
+</configuration>
